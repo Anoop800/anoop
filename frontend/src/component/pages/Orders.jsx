@@ -1,0 +1,7 @@
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getAuthToken } from "../../utils/auth";
+import { formatCurrency } from "../../utils/currency";
+import "../../App.css";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+export default function Orders(){const [orders,setOrders]=useState([]);const [message,setMessage]=useState('');useEffect(()=>{if(!getAuthToken()){setMessage('Please log in to view your orders.');return;}fetch(`${API_URL}/api/orders`,{headers:{Authorization:`Bearer ${getAuthToken()}`}}).then(async r=>{const d=await r.json();if(!r.ok)throw Error(d.message);setOrders(d)}).catch(e=>setMessage(e.message||'Unable to load orders'))},[]);return <main className="page-shell"><div className="catalog-header"><div><p className="eyebrow">Purchase history</p><h1>My orders</h1></div></div>{message?<div className="glass-panel"><p>{message}</p><Link className="button" to="/login">Login</Link></div>:orders.length?<div className="vendor-product-list">{orders.map(o=><article key={o._id}><div><h3>{o.orderNumber}</h3><p>{new Date(o.createdAt).toLocaleString('en-IN')} · {o.items.length} item(s)</p><strong>{formatCurrency(o.total)}</strong></div><span>{o.status}</span><Link className="button" to={`/orders/${o._id}`}>View order</Link></article>)}</div>:<div className="glass-panel"><p className="muted">You have not placed any orders yet.</p><Link className="button" to="/categories">Start shopping</Link></div>}</main>}

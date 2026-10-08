@@ -1,0 +1,2 @@
+import { Link } from "react-router-dom";
+export default function ForgotPassword(){return <main className="page-shell"><div className="glass-panel" style={{maxWidth:620,margin:'40px auto'}}><p className="eyebrow">Account recovery</p><h1>Forgot password?</h1><p className="muted">Password recovery email delivery is not configured in this project yet. For now, contact the store administrator to reset your account securely.</p><Link className="button" to="/login">Back to login</Link></div></main>}
